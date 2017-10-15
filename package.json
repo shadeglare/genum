@@ -1,0 +1,22 @@
+{
+  "name": "genum",
+  "version": "0.1.0",
+  "description": "LINQ like data processing",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shadeglare/genum.git"
+  },
+  "keywords": [
+    "generator",
+    "generators",
+    "linq",
+    "streams"
+  ],
+  "author": "Max Koverdyaev <shadeglare@gmail.com>",
+  "license": "MIT"
+}
