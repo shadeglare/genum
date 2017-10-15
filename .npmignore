@@ -1,3 +1,5 @@
 src
 .gitignore
 build.sh
+node_modules/
+tests/

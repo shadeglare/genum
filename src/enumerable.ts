@@ -85,6 +85,14 @@ export class Enumerable<T> {
     return false;
   }
 
+  public zip<TRight, TResult>(
+    right: Enumerable<TRight>, 
+    resultSelector: (left: T, right: TRight) => TResult
+  ): Enumerable<TResult> {
+    let generator = () => Iters.zip(this.generator, right.generator, resultSelector);
+    return Enumerable.fromGenerator(generator);
+  }
+
   public toArray() {
     return Array.from(this.generator());
   }

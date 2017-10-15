@@ -1,11 +1,11 @@
 {
   "name": "genum",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "LINQ like data processing",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha -r node_modules/ts-node/register --compiler node/modules/.bin/tsc tests/index.ts"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,13 @@
     "streams"
   ],
   "author": "Max Koverdyaev <shadeglare@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3"
+  }
 }

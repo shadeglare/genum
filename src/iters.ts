@@ -116,3 +116,20 @@ export function* lookup<T, TKey extends Primitive, TElement, TResult>(
   }
   yield* map.entries();
 }
+
+export function* zip<TLeft, TRight, TResult>(
+  leftGenerator: () => IterableIterator<TLeft>,
+  rightGenerator: () => IterableIterator<TRight>,
+  resultSelector: (left: TLeft, right: TRight) => TResult
+) {
+  let leftIterator = leftGenerator();
+  let rightIterator = rightGenerator();
+  while (true) {
+    let left = leftIterator.next();
+    let right = rightIterator.next();
+    if (left.done || right.done) {
+      break;
+    }
+    yield resultSelector(left.value, right.value);
+  }
+}
