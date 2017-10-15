@@ -3,3 +3,4 @@ src
 build.sh
 node_modules/
 tests/
+package-lock.json
