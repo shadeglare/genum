@@ -2,52 +2,63 @@ import * as Iters from "./iters";
 
 export type Primitive = Iters.Primitive;
 
-export class Enumerable<T> {
-  public readonly generator: () => IterableIterator<T>;
+export class Enumerable<TSource> {
+  /**
+   * Gets the native generator function of the sequence.
+   */
+  public readonly generator: () => IterableIterator<TSource>;
 
-  protected constructor(generator: () => IterableIterator<T>) {
+  /**
+   * Creates an instance of the Enumerable class.
+   * @param generator A generator function to produce a sequence.
+   */
+  protected constructor(generator: () => IterableIterator<TSource>) {
     this.generator = generator;
   }
 
-  public where(predicate: (value: T, index: number) => boolean): Enumerable<T> {
-    let generator = () => Iters.where(this.generator, predicate);
-    return Enumerable.fromGenerator(generator);
-  }
-
-  public select<TResult>(selector: (value: T, index: number) => TResult): Enumerable<TResult> {
+  /**
+   * Creates a new enumerable from the projected elements of the current enumerable.
+   * @param selector A projector function for the elements of the sequence.
+   */
+  public select<TResult>(selector: (value: TSource, index: number) => TResult): Enumerable<TResult> {
     let generator = () => Iters.select(this.generator, selector);
     return Enumerable.fromGenerator(generator);
   }
 
-  public selectMany<TResult>(selector: (value: T, index: number) => Enumerable<TResult>): Enumerable<TResult> {
+  public where(predicate: (value: TSource, index: number) => boolean): Enumerable<TSource> {
+    let generator = () => Iters.where(this.generator, predicate);
+    return Enumerable.fromGenerator(generator);
+  }
+
+  public selectMany<TResult>(selector: (value: TSource, index: number) => Enumerable<TResult>): Enumerable<TResult> {
     let generator = () => Iters.selectMany(this.generator, (value, index) => selector(value, index).generator());
     return Enumerable.fromGenerator(generator);
   }
 
-  public skip(count: number): Enumerable<T> {
+  public skip(count: number): Enumerable<TSource> {
     let generator = () => Iters.skip(this.generator, count);
     return Enumerable.fromGenerator(generator);
   }
 
-  public take(count: number): Enumerable<T> {
+  public take(count: number): Enumerable<TSource> {
     let generator = () => Iters.take(this.generator, count);
     return Enumerable.fromGenerator(generator);
   }
 
   public groupBy<TKey extends Primitive, TElement>(
-    keySelector: (value: T) => TKey,
-    elementSelector: (value: T) => TElement,
+    keySelector: (value: TSource) => TKey,
+    elementSelector: (value: TSource) => TElement,
   ): Enumerable<Grouping<TKey, TElement>>;
 
   public groupBy<TKey extends Primitive, TElement, TResult>(
-    keySelector: (value: T) => TKey,
-    elementSelector: (value: T) => TElement,
+    keySelector: (value: TSource) => TKey,
+    elementSelector: (value: TSource) => TElement,
     resultSelector: (key: TKey, elements: TElement[]) => TResult
   ): Enumerable<TResult>;
 
   public groupBy<TKey extends Primitive, TElement, TResult>(
-    keySelector: (value: T) => TKey,
-    elementSelector: (value: T) => TElement,
+    keySelector: (value: TSource) => TKey,
+    elementSelector: (value: TSource) => TElement,
     resultSelector?: (key: TKey, elements: TElement[]) => TResult
   ): Enumerable<TResult> | Enumerable<Grouping<TKey, TElement>> {
     let lookup = () => Iters.lookup(this.generator, keySelector, elementSelector);
@@ -62,20 +73,20 @@ export class Enumerable<T> {
 
   public join<TRight, TKey extends Primitive, TResult>(
     right: Enumerable<TRight>,
-    leftKeySelector: (value: T) => TKey,
+    leftKeySelector: (value: TSource) => TKey,
     rightKeySelector: (value: TRight) => TKey,
-    resultSelector: (left: T, right: TRight) => TResult
+    resultSelector: (left: TSource, right: TRight) => TResult
   ): Enumerable<TResult> {
     let generator = () => Iters.join(this.generator, right.generator, leftKeySelector, rightKeySelector, resultSelector);
     return Enumerable.fromGenerator(generator);
   }
 
-  public concat(right: Enumerable<T>): Enumerable<T> {
+  public concat(right: Enumerable<TSource>): Enumerable<TSource> {
     let generator = () => Iters.concat(this.generator, right.generator);
     return Enumerable.fromGenerator(generator);
   }
 
-  public contains(value: T, comparer?: (left: T, right: T) => boolean): boolean {
+  public contains(value: TSource, comparer?: (left: TSource, right: TSource) => boolean): boolean {
     comparer = comparer ? comparer : (left, right) => left === right;
     for (let x of this.generator()) {
       if (comparer(x, value)) {
@@ -87,7 +98,7 @@ export class Enumerable<T> {
 
   public zip<TRight, TResult>(
     right: Enumerable<TRight>, 
-    resultSelector: (left: T, right: TRight) => TResult
+    resultSelector: (left: TSource, right: TRight) => TResult
   ): Enumerable<TResult> {
     let generator = () => Iters.zip(this.generator, right.generator, resultSelector);
     return Enumerable.fromGenerator(generator);

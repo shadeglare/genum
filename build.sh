@@ -1,1 +1,1 @@
-tsc -p src/tsconfig.json
+node_modules/.bin/tsc -p src/tsconfig.json

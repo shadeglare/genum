@@ -1,0 +1,1 @@
+node_modules/.bin/typedoc --module commonjs --target esnext --out docs/ src/

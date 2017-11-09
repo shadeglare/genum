@@ -3,4 +3,5 @@ src
 build.sh
 node_modules/
 tests/
+docs/
 package-lock.json
