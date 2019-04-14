@@ -108,6 +108,10 @@ export class Enumerable<TSource> {
     return Array.from(this.generator());
   }
 
+  public count() {
+    return Iters.count(this.generator);
+  }
+
   public static range(start: number, count: number): Enumerable<number> {
     let generator = () => Iters.range(start, count);
     return new Enumerable(generator);

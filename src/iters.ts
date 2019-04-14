@@ -133,3 +133,11 @@ export function* zip<TLeft, TRight, TResult>(
     yield resultSelector(left.value, right.value);
   }
 }
+
+export function count<T>(generator: () => IterableIterator<T>): number {
+  let count = 0;
+  for (let item of generator()) {
+    count++;
+  }
+  return count;
+}
